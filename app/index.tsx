@@ -9,7 +9,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Eublepharis</Text>
+      <Text className="text-2xl font-bold">Eublepharis Malcularis</Text>
     </View>
   );
 }
