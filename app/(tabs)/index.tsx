@@ -1,4 +1,5 @@
 import { Text, View } from "react-native";
+import { Link } from "expo-router";
 
 export default function Index() {
   return (
@@ -10,6 +11,7 @@ export default function Index() {
       }}
     >
       <Text className="text-2xl font-bold">Eublepharis Malcularis</Text>
+      <Link className="text-blue-500 underline" href="/about">About</Link>
     </View>
   );
 }
