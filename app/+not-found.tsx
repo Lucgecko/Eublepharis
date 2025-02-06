@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, RelativePathString } from 'expo-router';
 import { Fragment } from 'react';
 
 export default function NotFoundScreen() {
@@ -7,7 +7,7 @@ export default function NotFoundScreen() {
     <Fragment>
       <Stack.Screen options={{ title: 'Oops! Not Found' }} />
       <View style={styles.container}>
-        <Link href="/" style={styles.button}> {/*This works but the linter is trippin wtf..... */}
+        <Link href={"/" as RelativePathString} style={styles.button}> {/*This works but the linter is trippin wtf..... */}
           Go back to the Home screen!
         </Link>
       </View>
