@@ -10,7 +10,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text className="text-2xl font-bold">Eublepharis Malcularis</Text>
+      <Text className="text-2xl font-bold">Eublepharis Macularius</Text>
       <Link className="text-blue-500 underline" href="/about">About</Link>
     </View>
   );
