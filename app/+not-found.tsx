@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 export default function NotFoundScreen() {
   return (
     <Fragment>
-      <Stack.Screen options={{ title: 'Oops! Not Found' }} />
+      <Stack.Screen options={{ title: 'Oops!! Not Found' }} />
       <View style={styles.container}>
         <Link href={"/" as RelativePathString} style={styles.button}> {/*This works but the linter is trippin wtf..... https://docs.expo.dev/tutorial/add-navigation/ */}
           Go back to the Home screen!
