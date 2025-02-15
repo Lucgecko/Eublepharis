@@ -1,1 +1,1 @@
-Expo Template
+Expo Template with NativeWind.
