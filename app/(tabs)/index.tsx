@@ -10,8 +10,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text className="text-2xl font-bold">Networking Innovation and eXcellence in Technology</Text>
-      <Link className="text-blue-500 underline" href="/about">About</Link>
+      <Text className="text-2xl font-bold">GeckoPOS</Text> {/*Networking Innovation and eXcellence in Technology */}
     </View>
   );
 }

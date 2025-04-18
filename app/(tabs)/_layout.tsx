@@ -15,7 +15,7 @@ export default function TabLayout() {
         backgroundColor: '#25292e',
       },
     }}>
-      <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: ({ color, focused }) => (
+      <Tabs.Screen name="index" options={{ title: 'LargeGeckoPOS', tabBarIcon: ({ color, focused }) => (
         <Ionicons name={focused ? 'home-sharp' : 'home-outline'} size={24} color={color} />
       ),
        }} 
