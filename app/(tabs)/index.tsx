@@ -9,7 +9,8 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text className="text-2xl font-bold">GeckoPOS</Text> {/*Networking Innovation and eXcellence in Technology */}
+      <Text className="text-3xl">GeckoPOS</Text> {/*Networking Innovation and eXcellence in Technology */}
+      <button className="items-end">...</button>
     </View>
   );
 }
