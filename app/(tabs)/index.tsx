@@ -8,6 +8,8 @@ import { Alert } from 'react-native';
 import { Box, Grid, Button } from '@mui/material';
 import { ScrollView } from 'react-native';
 import { Modal, MenuItem } from '@mui/material';
+import { blueGrey } from "@mui/material/colors";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 // A point of sale system by Lucgecko@gmail.com
@@ -17,8 +19,9 @@ import { Modal, MenuItem } from '@mui/material';
 
   const COLORS = {
     Saladcolor: '#50C878', //salad color
-    Sandwichcolor: '#b78b43', //sandwich color
-    Appetizercolor: '#FFC0CB' //appetizer color
+    Sandwichcolor: '#ac9f75', //sandwich color
+    Appetizercolor: '#FFC0CB', //appetizer color
+    Omelettecolor: '#fef65b' //omelette color
 
   }
 
@@ -34,16 +37,16 @@ const menuItems = [
   { id: 9, name: "Basket of Fries", price: 9, color: COLORS.Appetizercolor },
   { id: 10, name: "House Salad", price: 9, color: COLORS.Saladcolor },
   { id: 11, name: "Basket of Bread and Butter", price: 9, color: COLORS.Sandwichcolor },
-  { id: 12, name: "Prosicutto Omelette", price: 23 },
-  { id: 13, name: "Bacon Omelette", price: 23 },
-  { id: 14, name: "Pork Omelette", price: 23 },
-  { id: 15, name: "Brie Omelette", price: 23 },
-  { id: 16, name: "Crab Cake Omelette", price: 26 },
-  { id: 17, name: "Goat Cheese Omelette", price: 23 },
+  { id: 12, name: "Prosicutto Omelette", price: 23, color: COLORS.Omelettecolor },
+  { id: 13, name: "Bacon Omelette", price: 23, color: COLORS.Omelettecolor },
+  { id: 14, name: "Pork Omelette", price: 23, color: COLORS.Omelettecolor },
+  { id: 15, name: "Brie Cheese Omelette", price: 23, color: COLORS.Omelettecolor },
+  { id: 16, name: "Crab Cake Omelette", price: 26, color: COLORS.Omelettecolor },
+  { id: 17, name: "Goat Cheese Omelette", price: 23, color: COLORS.Omelettecolor },
   { id: 18, name: "Quiche Florentine", price: 22 },
   { id: 19, name: "Quiche Lorraine", price: 22 },
   { id: 20, name: "Torte de Paris", price: 23 },
-  { id: 21, name: "Eggs", price: 21 },
+  { id: 21, name: "Eggs", price: 21, color: COLORS.Omelettecolor },
   { id: 22, name: "Steak and Eggs", price: 40 },
   { id: 23, name: "Croque Monsieur", price: 23, color: COLORS.Sandwichcolor },
   { id: 24, name: "Croque Madame", price: 24, color: COLORS.Sandwichcolor },
@@ -91,7 +94,7 @@ interface MenuItem {
 export default function Index() {
   const [total, setTotal] = useState(0);
   const [selectedItems, setSelectedItems] = useState<MenuItem[]>([]);
-  const [taxRate, setTaxRate] = useState(7.25); // default tax rate
+  const [taxRate, setTaxRate] = useState(7.75); // default tax rate
   const [newTaxRate, setNewTaxRate] = useState('');
 
   const handleAddItem = (item: MenuItem) => {
@@ -99,19 +102,25 @@ export default function Index() {
     setTotal((prevTotal) => prevTotal + item.price);
   };
 
-  const handleRemoveLastItem = () => {
-    if (selectedItems.length > 0) {
-      const lastItem = selectedItems[selectedItems.length - 1];
-      setSelectedItems((prevItems) => prevItems.slice(0, -1));
-      setTotal((prevTotal) => prevTotal - lastItem.price);
-    }
-  };
+const handleRemoveLastItem = () => {
+  if (selectedItems.length > 0) {
+    const lastItem = selectedItems[selectedItems.length - 1];
+    const preTaxAmount = selectedItems.reduce((acc, item) => acc + item.price, 0) - lastItem.price;
+    const taxAmount = preTaxAmount * taxRate / 100;
+    const newTotal = preTaxAmount + taxAmount + gratuityAmount;
+    setTotal(newTotal);
+    setSelectedItems((prevItems) => prevItems.slice(0, -1));
+  }
+};
 
-  const handleResetTotal = () => {
-    setSelectedItems([]);
-    setTotal(0);
-    setGratuityAmount(0);
-  };
+const handleResetTotal = () => {
+  setSelectedItems([]);
+  const preTaxAmount = 0;
+  const taxAmount = 0;
+  setTotal(preTaxAmount + taxAmount);
+  setGratuityAmount(0);
+  setShowGratuity(false);
+};
 
  const handleUpdateTaxRate = () => {
   if (newTaxRate !== '') {
@@ -125,17 +134,36 @@ export default function Index() {
   }
 };
 
-const handleAddGratuity = () => {
+/*const handleAddGratuity = () => {
+  const preTaxAmount = selectedItems.reduce((acc, item) => acc + item.price, 0);
   const gratuityPercentage = 0.18; // 18% gratuity
-  const gratuityAmount = subtotal * gratuityPercentage;
+  const gratuityAmount = preTaxAmount * gratuityPercentage;
   setGratuityAmount(gratuityAmount);
-  setTotal(subtotal + gratuityAmount);
+  setTotal(preTaxAmount + gratuityAmount + (preTaxAmount * taxRate / 100));
   setShowGratuity(true);
-};
+}; */
 
 const [gratuityAmount, setGratuityAmount] = useState(0);
 const [showGratuity, setShowGratuity] = useState(false);
 
+
+const handleGratuity = () => {
+  if (showGratuity) {
+    // Remove gratuity
+    const preTaxAmount = selectedItems.reduce((acc, item) => acc + item.price, 0);
+    const taxAmount = preTaxAmount * taxRate / 100;
+    setTotal(preTaxAmount + taxAmount);
+    setGratuityAmount(0);
+  } else {
+    // Add gratuity
+    const preTaxAmount = selectedItems.reduce((acc, item) => acc + item.price, 0);
+    const gratuityPercentage = 0.18; // 18% gratuity
+    const gratuityAmount = preTaxAmount * gratuityPercentage;
+    setGratuityAmount(gratuityAmount);
+    setTotal(preTaxAmount + gratuityAmount + (preTaxAmount * taxRate / 100));
+  }
+  setShowGratuity(!showGratuity);
+};
 
   const subtotal = total;
   const tax = subtotal * (taxRate / 100);
@@ -148,13 +176,16 @@ const [showGratuity, setShowGratuity] = useState(false);
 }
 
   return (
-    <View
+    <View className=""
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
       }}
     >
+              <Button variant="outlined" style={{ marginBottom: 10 }}>
+          Print
+        </Button>
       <Text style={{ fontSize: 24 }}>Subtotal: ${subtotal.toFixed(2)}</Text>
       <Text style={{ fontSize: 24 }}>Tax ({taxRate}%): ${tax.toFixed(2)}</Text>
       {gratuityAmount > 0.01 && ( //only shows gratuity if it's above 0.01
@@ -163,7 +194,7 @@ const [showGratuity, setShowGratuity] = useState(false);
       <Text style={{ fontSize: 24 }}>Total: ${grandTotal.toFixed(2)}</Text>
       
       <ScrollView>
-      <Grid container spacing={3} gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}>
+      <Grid container spacing={1} gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}>
   {menuItems.map((item) => (
     <Box key={item.id} sx={{ xs: 2, sm: 3, md: 4 }}>
       <TouchableOpacity onPress={() => handleAddItem(item)}>
@@ -175,37 +206,27 @@ const [showGratuity, setShowGratuity] = useState(false);
   ))}
 </Grid>
       </ScrollView>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", width: "100%", marginTop: 20 }}>
+      <View>
         <TouchableOpacity onPress={handleRemoveLastItem}>
-          <Button variant="contained" color ="secondary">Undo</Button>
+          <Button variant="contained" color ="secondary" startIcon={ <AntDesign name="back" size={24} color="black" /> }>Undo</Button>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleResetTotal}>
           <Button variant="contained" color="error" startIcon={<DeleteIcon />}>Reset Total</Button>
         </TouchableOpacity>
-        <RNButton //button to add gratuity
-  title="Add 18% Gratuity"
-  onPress={handleAddGratuity}
-  disabled={showGratuity}
-/>
-<RNButton //button to remove gratuity
-  title="Remove Gratuity"
-  onPress={() => {
-    setGratuityAmount(0);
-    setShowGratuity(false);
-    setTotal(total - gratuityAmount);
-  }}
-/>
-        <View style={{ flexDirection: "row" }}>
+
+        <Button onClick={handleGratuity}>
+  {showGratuity ? 'Remove 18% Gratuity' : 'Add 18% Gratuity'}
+</Button>
+        <View className="" style={{ flexDirection: "row" }}>
           <TextInput
-            style={{ width: 82, height: 40, borderColor: 'green', borderWidth: 1 }}
             value={newTaxRate}
             onChangeText={(text) => {
               const numericText = text.replace(/[^0-9.]/g, '');
               setNewTaxRate(numericText);
             }}
             placeholder="Edit Tax Rate"
-            keyboardType="numeric"
+            keyboardType="decimal-pad"
           />
           
           <RNButton title="Update Tax Rate" color="green" onPress={handleUpdateTaxRate} />
