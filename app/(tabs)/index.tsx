@@ -215,7 +215,7 @@ const handleGratuity = () => {
           <Button variant="contained" color="error" startIcon={<DeleteIcon />}>Reset Total</Button>
         </TouchableOpacity>
 
-        <Button onClick={handleGratuity}>
+        <Button style={{ backgroundColor: "#ADD8E6" }} onClick={handleGratuity}>
   {showGratuity ? 'Remove 18% Gratuity' : 'Add 18% Gratuity'}
 </Button>
         <View className="" style={{ flexDirection: "row" }}>
