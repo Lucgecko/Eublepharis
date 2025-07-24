@@ -1,21 +1,18 @@
-import { Text, View, TouchableOpacity, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, TextInput, TouchableWithoutFeedback } from "react-native";
 import { useState } from "react";
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button as RNButton } from 'react-native';
-import { Alert } from 'react-native';
-import { Box, Grid, Button } from '@mui/material';
-import { ScrollView } from 'react-native';
-import { Modal, MenuItem } from '@mui/material';
+import { Alert, ScrollView } from 'react-native';
+import { Box, Grid, Button, MenuItem, Modal, ButtonBase } from '@mui/material';
 import { blueGrey } from "@mui/material/colors";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 
-// A point of sale system by Lucgecko@gmail.com
 
 
-// menu items
+// menu colors
 
   const COLORS = {
     Saladcolor: '#50C878', //salad color
@@ -175,47 +172,47 @@ const handleGratuity = () => {
   Alert.alert('Warning', 'Invalid calculation');
 }
 
+
+
   return (
     <View className=""
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
-              <Button variant="outlined" style={{ marginBottom: 10 }}>
-          Print
-        </Button>
-      <Text style={{ fontSize: 24 }}>Subtotal: ${subtotal.toFixed(2)}</Text>
-      <Text style={{ fontSize: 24 }}>Tax ({taxRate}%): ${tax.toFixed(2)}</Text>
+      <Text style={{ fontSize: 12 }}>Subtotal: ${subtotal.toFixed(2)}</Text>
+      <Text style={{ fontSize: 12 }}>Tax ({taxRate}%): ${tax.toFixed(2)}</Text>
       {gratuityAmount > 0.01 && ( //only shows gratuity if it's above 0.01
-      <Text style={{ fontSize: 24 }}> {showGratuity ? 'Gratuity (18%):' : ''} ${gratuityAmount.toFixed(2)}</Text>
+      <Text style={{ fontSize: 14 }}> {showGratuity ? 'Gratuity (18%):' : ''} ${gratuityAmount.toFixed(2)}</Text>
       )}
-      <Text style={{ fontSize: 24 }}>Total: ${grandTotal.toFixed(2)}</Text>
-      
+      <Text style={{ fontSize: 16 }}>Total: ${grandTotal.toFixed(2)}</Text>
       <ScrollView>
       <Grid container spacing={1} gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}>
   {menuItems.map((item) => (
     <Box key={item.id} sx={{ xs: 2, sm: 3, md: 4 }}>
-      <TouchableOpacity onPress={() => handleAddItem(item)}>
-        <Button variant="outlined" style={{ backgroundColor: item.color }}>
+      <TouchableWithoutFeedback onPress={() => handleAddItem(item)}>
+        <Button variant="outlined" style={{ backgroundColor: item.color, opacity: 1 }} disableRipple={true}>
           {item.name} - ${item.price}
         </Button>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     </Box>
   ))}
 </Grid>
       </ScrollView>
-      <View>
-        <TouchableOpacity onPress={handleRemoveLastItem}>
-          <Button variant="contained" color ="secondary" startIcon={ <AntDesign name="back" size={24} color="black" /> }>Undo</Button>
-        </TouchableOpacity>
-        <TouchableOpacity
+      <View
+      style={{
+        justifyContent: "flex-start"
+      }}>
+        <TouchableWithoutFeedback onPress={handleRemoveLastItem}>
+          <Button variant="contained" color ="secondary" startIcon={ <AntDesign name="back" size={24} color="black" /> } disableRipple={true}>Undo</Button>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
           onPress={handleResetTotal}>
-          <Button variant="contained" color="error" startIcon={<DeleteIcon />}>Reset Total</Button>
-        </TouchableOpacity>
-
-        <Button style={{ backgroundColor: "#ADD8E6" }} onClick={handleGratuity}>
+          <Button variant="contained" color="error" startIcon={<DeleteIcon />} disableRipple={true}>Reset Total</Button>
+        </TouchableWithoutFeedback>
+        <Button style={{ backgroundColor: "#ADD8E6" }} disableRipple={true} onClick={handleGratuity}>
   {showGratuity ? 'Remove 18% Gratuity' : 'Add 18% Gratuity'}
 </Button>
         <View className="" style={{ flexDirection: "row" }}>
@@ -228,7 +225,6 @@ const handleGratuity = () => {
             placeholder="Edit Tax Rate"
             keyboardType="decimal-pad"
           />
-          
           <RNButton title="Update Tax Rate" color="green" onPress={handleUpdateTaxRate} />
         </View>
       </View>

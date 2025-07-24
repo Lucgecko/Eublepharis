@@ -2,9 +2,9 @@ import { Stack } from 'expo-router';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
+    <Stack screenOptions={{ animation: "none" }}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: "none" }} />
+      <Stack.Screen name="+not-found" options={{ animation: "none" }} />
     </Stack>
   );
 }
