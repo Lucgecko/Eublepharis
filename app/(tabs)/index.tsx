@@ -102,10 +102,13 @@ export default function Index() {
 const handleRemoveLastItem = () => {
   if (selectedItems.length > 0) {
     const lastItem = selectedItems[selectedItems.length - 1];
-    const preTaxAmount = selectedItems.reduce((acc, item) => acc + item.price, 0) - lastItem.price;
-    const taxAmount = preTaxAmount * taxRate / 100;
-    const newTotal = preTaxAmount + taxAmount + gratuityAmount;
-    setTotal(newTotal);
+    const subtotal = selectedItems.reduce((acc, item) => acc + item.price, 0) - lastItem.price;
+    const taxAmount = subtotal * taxRate / 100;
+    const gratuityAmount = showGratuity ? subtotal * 0.18 : 0;
+    const newTotal = subtotal + taxAmount;
+    const finalTotal = newTotal + (gratuityAmount / (1 + (taxRate / 100)));
+    setGratuityAmount(gratuityAmount);
+    setTotal(finalTotal);
     setSelectedItems((prevItems) => prevItems.slice(0, -1));
   }
 };
@@ -162,12 +165,12 @@ const handleGratuity = () => {
   setShowGratuity(!showGratuity);
 };
 
-  const subtotal = total;
+  const subtotal = selectedItems.reduce((acc, item) => acc + item.price, 0);
   const tax = subtotal * (taxRate / 100);
   if (isNaN(tax)) {
   Alert.alert('Warning', 'Invalid calculation'); //NaN checks
 }
-  const grandTotal = subtotal + tax;
+  const grandTotal = subtotal + tax +gratuityAmount;
   if (isNaN(grandTotal)) {
   Alert.alert('Warning', 'Invalid calculation');
 }
