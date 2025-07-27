@@ -4,7 +4,7 @@ import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button as RNButton } from 'react-native';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, FlatList } from 'react-native';
 import { Box, Grid, Button, MenuItem, Modal, ButtonBase } from '@mui/material';
 import { blueGrey } from "@mui/material/colors";
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -20,7 +20,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
     Appetizercolor: '#FFC0CB', //appetizer color
     Omelettecolor: '#fef65b' //omelette color
 
-  }
+  };
 
 const menuItems = [
   { id: 1, name: "Chicken Strips", price: 16, color: COLORS.Appetizercolor },
@@ -74,7 +74,7 @@ const menuItems = [
   { id: 49, name: "Side of Scallops", price: 10 },
   { id: 50, name: "Small Fruit Plate", price: 12 },
   { id: 51, name: "Large Fruit Plate", price: 18 },
-  { id: 52, name: "Add domestic cheese and baguette", price: 11 },
+  { id: 52, name: "Domestic cheese and baguette", price: 11 },
   { id: 53, name: "Small Soup", price: 9 },
   { id: 54, name: "Medium Soup", price: 10 },
   { id: 55, name: "Large Soup", price: 11 },
@@ -86,7 +86,7 @@ interface MenuItem {
   name: string;
   price: number;
   color?: string; //menuitem color
-}
+};
 
 export default function Index() {
   const [total, setTotal] = useState(0);
@@ -173,24 +173,27 @@ const handleGratuity = () => {
   const grandTotal = subtotal + tax +gratuityAmount;
   if (isNaN(grandTotal)) {
   Alert.alert('Warning', 'Invalid calculation');
-}
+};
 
 
 
   return (
     <View className=""
       style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        //flexDirection: 'row',
+        //justifyContent: 'space-around',
+        //alignItems: 'flex-end',
+        flex: 1
       }}
     >
-      <Text style={{ fontSize: 12 }}>Subtotal: ${subtotal.toFixed(2)}</Text>
-      <Text style={{ fontSize: 12 }}>Tax ({taxRate}%): ${tax.toFixed(2)}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+      <Text style={{ fontSize: 14 }}>Subtotal: ${subtotal.toFixed(2)}</Text>
+      <Text style={{ fontSize: 14 }}>Tax ({taxRate}%): ${tax.toFixed(2)}</Text>
       {gratuityAmount > 0.01 && ( //only shows gratuity if it's above 0.01
       <Text style={{ fontSize: 14 }}> {showGratuity ? 'Gratuity (18%):' : ''} ${gratuityAmount.toFixed(2)}</Text>
       )}
       <Text style={{ fontSize: 16 }}>Total: ${grandTotal.toFixed(2)}</Text>
+      </View>
       <ScrollView>
       <Grid container spacing={1} gridTemplateColumns={{ xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(4, 1fr)' }}>
   {menuItems.map((item) => (
@@ -204,10 +207,7 @@ const handleGratuity = () => {
   ))}
 </Grid>
       </ScrollView>
-      <View
-      style={{
-        justifyContent: "flex-start"
-      }}>
+      <View style={{ flexDirection: "row", height: 40 }}>
         <TouchableWithoutFeedback onPress={handleRemoveLastItem}>
           <Button variant="contained" color ="secondary" startIcon={ <AntDesign name="back" size={24} color="black" /> } disableRipple={true}>Undo</Button>
         </TouchableWithoutFeedback>
@@ -218,7 +218,7 @@ const handleGratuity = () => {
         <Button style={{ backgroundColor: "#ADD8E6" }} disableRipple={true} onClick={handleGratuity}>
   {showGratuity ? 'Remove 18% Gratuity' : 'Add 18% Gratuity'}
 </Button>
-        <View className="" style={{ flexDirection: "row" }}>
+        <View className="" style={{  }}>
           <TextInput
             value={newTaxRate}
             onChangeText={(text) => {
@@ -233,4 +233,4 @@ const handleGratuity = () => {
       </View>
     </View>
   );
-}
+};
